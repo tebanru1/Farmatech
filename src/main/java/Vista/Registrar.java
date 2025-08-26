@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Registrar extends javax.swing.JFrame{
@@ -22,6 +23,7 @@ public Registrar() {
         this.setLocationRelativeTo(null);
         cargarDatosLogin();
         configurarPlaceholders();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
          
     }
 
