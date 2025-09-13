@@ -124,5 +124,28 @@ public class ClienteDAO {
             System.out.println(e.toString());
         }return cliente;
    }
+ public List<Cliente> buscarPorNombre(String nombre) {
+    List<Cliente> lista = new ArrayList<>();
+    String sql = "SELECT * FROM clientes WHERE nombre LIKE ?";
+
+    try  {
+        con=cn.conectar();
+        ps=con.prepareStatement(sql);
+        ps.setString(1, nombre + "%"); 
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Cliente clien = new Cliente();
+            clien.setCedula(rs.getInt("cedula"));
+            clien.setNombre(rs.getString("nombre"));
+            clien.setTelefono(rs.getLong("telefono"));
+            clien.setCorreo(rs.getString("correo"));
+            clien.setDireccion(rs.getString("direccion"));
+            lista.add(clien);
+        }
+    } catch (SQLException e) {
+        System.out.println(e.toString());
+    }
+    return lista;
+}
 }
 

@@ -43,10 +43,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import javax.swing.JFrame;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class MenuPrincipal extends javax.swing.JFrame {
     Cliente cl=new Cliente();
@@ -65,6 +74,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     DefaultTableModel mdl=new DefaultTableModel();
     private Lote lote;
     private JPopupMenu popupSugerencias = new JPopupMenu();
+     private JPopupMenu listarclientes = new JPopupMenu();
     float TotalPagar = 0;
      int item;
      
@@ -182,12 +192,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public void ListarVentas(){
         List<Ventas> ListarVent=Vdao.ListarVentas();
         modelo = (DefaultTableModel) TableVentas.getModel();
-        Object[] ob=new Object[4];
+        Object[] ob=new Object[5];
         for(int i=0;i< ListarVent.size();i++){
             ob[0]=ListarVent.get(i).getId();
             ob[1]=ListarVent.get(i).getCliente();
             ob[2]=ListarVent.get(i).getVendedor();
             ob[3]=ListarVent.get(i).getTotal();
+            ob[4]=ListarVent.get(i).getFecha();
             modelo.addRow(ob);
         }
         TableVentas.setModel(modelo);
@@ -362,6 +373,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         TableVentas = new javax.swing.JTable();
         btnPdfVentas = new javax.swing.JButton();
         txtIdVenta = new javax.swing.JTextField();
+        btnGenerarGrafica = new javax.swing.JButton();
+        fechainicio = new com.toedter.calendar.JDateChooser();
+        fechafinal = new com.toedter.calendar.JDateChooser();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
@@ -473,6 +489,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnVentas.setMaximumSize(new java.awt.Dimension(97, 44));
         btnVentas.setMinimumSize(new java.awt.Dimension(97, 44));
         btnVentas.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnVentas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVentasMouseClicked(evt);
+            }
+        });
         btnVentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVentasActionPerformed(evt);
@@ -754,9 +775,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        txtNombreClienteVenta.setEditable(false);
         txtNombreClienteVenta.setMinimumSize(new java.awt.Dimension(64, 50));
         txtNombreClienteVenta.setPreferredSize(new java.awt.Dimension(64, 30));
+        txtNombreClienteVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNombreClienteVentaKeyReleased(evt);
+            }
+        });
 
         btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/impresora.png"))); // NOI18N
         btnGenerarVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -1530,7 +1555,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "CLIENTE", "VENDEDOR", "TOTAL"
+                "ID", "CLIENTE", "VENDEDOR", "TOTAL", "FECHA"
             }
         ));
         TableVentas.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1558,6 +1583,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnGenerarGrafica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafico.png"))); // NOI18N
+        btnGenerarGrafica.setMaximumSize(new java.awt.Dimension(60, 60));
+        btnGenerarGrafica.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnGenerarGrafica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarGraficaActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Fecha inicio:");
+
+        jLabel22.setText("fecha final:");
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1565,26 +1603,45 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1030, Short.MAX_VALUE)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(btnPdfVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(211, 211, 211)
-                        .addComponent(txtIdVenta)
-                        .addGap(459, 459, 459))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIdVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(294, 294, 294)
+                        .addComponent(btnGenerarGrafica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel11)
+                        .addGap(7, 7, 7)
+                        .addComponent(fechainicio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel22)
+                        .addGap(7, 7, 7)
+                        .addComponent(fechafinal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(txtIdVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnPdfVentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPdfVentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnGenerarGrafica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtIdVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(fechainicio, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                .addComponent(fechafinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                            .addComponent(jLabel11)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         jTabbedPane2.addTab("tab5", jPanel8);
@@ -2226,6 +2283,7 @@ ObtenerLote(idProducto);
                 ActualizaStock();
                 pdf();
                 limpiarCamposVenta();
+                limpiarDatosCliente();
                 LimpiarTable();
                 calcularTotalPagar();
                 JOptionPane.showMessageDialog(null, "¡Venta generada con exito!");
@@ -2345,6 +2403,132 @@ ObtenerLote(idProducto);
         ListarProducto();
     }//GEN-LAST:event_btnProductosMouseClicked
 
+    private void txtNombreClienteVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteVentaKeyReleased
+  String texto = txtNombreClienteVenta.getText().trim();
+    listarclientes.setVisible(false); 
+
+    if (!texto.isEmpty()) {
+        List<Cliente> lista = client.buscarPorNombre(texto);
+
+        if (!lista.isEmpty()) {
+            listarclientes.removeAll(); 
+
+            for (Cliente clien : lista) {
+                JMenuItem cliente = new JMenuItem(clien.getNombre());
+                cliente.addActionListener(e -> {
+                    txtCedulaVenta.setText(String.valueOf(clien.getCedula()));
+                    txtNombreClienteVenta.setText(String.valueOf(clien.getNombre()));
+                    txttelefono.setText(String.valueOf(clien.getTelefono()));
+                    txtcorreo.setText(String.valueOf(clien.getCorreo()));
+                    txtdireccion.setText(String.valueOf(clien.getDireccion()));
+                    listarclientes.setVisible(false);
+                    btnGenerarVenta.requestFocus();
+                });
+                listarclientes.add(cliente);
+            }
+            listarclientes.show(txtNombreClienteVenta, 0, txtNombreClienteVenta.getHeight());
+        }
+    }
+    }//GEN-LAST:event_txtNombreClienteVentaKeyReleased
+
+    private void btnGenerarGraficaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarGraficaActionPerformed
+    try {
+    java.util.Date inicioUtil = fechainicio.getDate();
+    java.util.Date finUtil = fechafinal.getDate();
+
+    if (inicioUtil == null || finUtil == null) {
+        JOptionPane.showMessageDialog(this, "Selecciona ambas fechas.");
+        return;
+    }
+
+    java.sql.Date inicio = new java.sql.Date(inicioUtil.getTime());
+    java.sql.Date fin = new java.sql.Date(finUtil.getTime());
+
+    String[] opciones = {"Productos", "Ventas ($)"};
+    int eleccion = JOptionPane.showOptionDialog(
+            this,
+            "Seleccione el tipo de reporte",
+            "Opciones de Reporte",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+    );
+
+    if (eleccion == -1) return; 
+
+    JFreeChart chart = null;
+
+    if (eleccion == 0) {
+        Map<String, Integer> ventas = Vdao.obtenerVentasPorProducto(inicio, fin);
+
+        if (ventas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay ventas en este rango de fechas.");
+            return;
+        }
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Map.Entry<String, Integer> entry : ventas.entrySet()) {
+            dataset.addValue(entry.getValue(), "Productos", entry.getKey());
+        }
+
+        chart = ChartFactory.createBarChart(
+                "Cantidad Vendida por Producto",
+                "Producto",
+                "Cantidad",
+                dataset
+        );
+
+        CategoryPlot plot = chart.getCategoryPlot();
+        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+        yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+    } else if (eleccion == 1) {
+        
+        Map<String, Double> ventasTotales = Vdao.obtenerVentasPorFecha(inicio, fin);
+
+        if (ventasTotales.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay ventas en este rango de fechas.");
+            return;
+        }
+
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (Map.Entry<String, Double> entry : ventasTotales.entrySet()) {
+            dataset.setValue(entry.getKey(), entry.getValue());
+        }
+
+        chart = ChartFactory.createPieChart(
+                "Ventas Totales por Día ($)",
+                dataset,
+                true,
+                true,
+                false
+        );
+    }
+
+    
+    ChartPanel panel = new ChartPanel(chart);
+    JFrame ventana = new JFrame("Reporte de Ventas");
+    ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    ventana.add(panel);
+    ventana.setSize(800, 600);
+    ventana.setLocationRelativeTo(null);
+    ventana.setVisible(true);
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    e.printStackTrace();
+}
+limpiarFecha();
+    }//GEN-LAST:event_btnGenerarGraficaActionPerformed
+
+    private void btnVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVentasMouseClicked
+     LimpiarTable();
+     ListarVentas();
+     limpiarFecha();
+    }//GEN-LAST:event_btnVentasMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -2395,6 +2579,7 @@ ObtenerLote(idProducto);
     private javax.swing.JButton btnEliminarVenta;
     private javax.swing.JButton btnExcelPro;
     private javax.swing.JButton btnFechaVencimiento;
+    private javax.swing.JButton btnGenerarGrafica;
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnGuardarCliente;
     private javax.swing.JButton btnGuardarPro;
@@ -2410,8 +2595,11 @@ ObtenerLote(idProducto);
     private javax.swing.JButton btnVentas;
     private javax.swing.JComboBox<String> cbxId_Proveedor;
     private javax.swing.JLabel dateText;
+    private com.toedter.calendar.JDateChooser fechafinal;
+    private com.toedter.calendar.JDateChooser fechainicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2423,6 +2611,7 @@ ObtenerLote(idProducto);
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
@@ -2543,14 +2732,26 @@ ObtenerLote(idProducto);
     }
     txtTotalPagar.setText(String.format("%.2f", TotalPagar));
     }
-     private void limpiarCamposVenta() {
+    
+    private void limpiarFecha(){
+        fechainicio.setDate(null);
+        fechafinal.setDate(null);
+    }
+    private void limpiarCamposVenta() {
     txtCodigoVenta.setText("");
     txtDescripcionVenta.setText("");
     txtCantidadVenta.setText("");
     txtPrecioVenta.setText("");
     txtStockDisponible.setText("");
-    
 }
+    private void limpiarDatosCliente(){
+     txtCedulaVenta.setText("");
+    txtNombreClienteVenta.setText("");
+    txtcorreo.setText("");
+    txtdireccion.setText("");
+    txttelefono.setText("");
+    }
+    
      private void limpiarCampoCliente(){
     txtCedulaVenta.setText("");
     txtNombreClienteVenta.setText("");
@@ -2559,15 +2760,18 @@ ObtenerLote(idProducto);
     txtdireccion.setText("");
     txtCodigoVenta.requestFocus();
      }
-     private void RegistrarVenta(){
-         String Cliente=txtNombreClienteVenta.getText();
-         String Vendedor=txtUsuario.getText();
-         Float total=TotalPagar;
-         v.setCliente(Cliente);
-         v.setVendedor(Vendedor);
-         v.setTotal(total);
-         Vdao.RegistrarVenta(v);
-     }
+     private void RegistrarVenta() {
+        String Cliente = txtNombreClienteVenta.getText();
+        String Vendedor = txtUsuario.getText();
+        Float total = TotalPagar;
+        v.setCliente(Cliente);
+        v.setVendedor(Vendedor);
+        v.setTotal(total);
+        java.sql.Date fechaActual = new java.sql.Date(System.currentTimeMillis());
+        v.setFecha(fechaActual);
+        Vdao.RegistrarVenta(v);
+}
+
      private void RegistrarDetalle(){
          for (int i = 0; i < tableVenta.getRowCount(); i++) {
              int cod=Integer.parseInt(tableVenta.getValueAt(i, 0).toString());
@@ -2614,14 +2818,13 @@ ObtenerLote(idProducto);
         int id = Vdao.idventa();
         FileOutputStream archivo;
 
-        // Detectar carpeta Documentos o Documents
+       
         String userHome = System.getProperty("user.home");
         File carpetaDocs = new File(userHome, "Documents");
         if (!carpetaDocs.exists()) {
             carpetaDocs = new File(userHome, "Documentos");
         }
 
-        // Ruta final del archivo
         File file = new File(carpetaDocs, "venta" + id + ".pdf");
         archivo = new FileOutputStream(file);
 
@@ -2629,15 +2832,14 @@ ObtenerLote(idProducto);
         PdfWriter.getInstance(doc, archivo);
         doc.open();
 
-        // Cargar imagen desde recursos (funciona en jar y en NetBeans)
+       
         InputStream is = getClass().getResourceAsStream("/imagenes/Logo2.png");
         if (is != null) {
             byte[] bytes = is.readAllBytes();
             Image img = Image.getInstance(bytes);
-            img.scaleToFit(80, 80); // Ajuste opcional
+            img.scaleToFit(80, 80);
             img.setAlignment(Image.ALIGN_LEFT);
             
-            // Encabezado
             Paragraph fecha = new Paragraph();
             Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.ORANGE);
             Font titulo = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
@@ -2654,12 +2856,13 @@ ObtenerLote(idProducto);
             Encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
 
             Encabezado.addCell(img);
-
-            String Nit = txtNitConfig.getText();
-            String Nom = txtNombreConfig.getText();
-            String tel = txtTelefonoConfig.getText();
-            String dir = txtDireccionConfig.getText();
-            String cor = txtCorreoConfig.getText();
+            
+            config = PRO.BuscarDatos();
+            String Nit = String.valueOf(config.getNit());
+            String Nom = config.getNombre();
+            String tel = String.valueOf(config.getTel());
+            String dir = config.getDireccion();
+            String cor = config.getCorreo();
 
             Encabezado.addCell("");
             Encabezado.addCell("NIT: " + Nit + "\nNOMBRE: " + Nom + "\nTELEFONO: " + tel +
@@ -2670,11 +2873,11 @@ ObtenerLote(idProducto);
             System.out.println("⚠ No se encontró la imagen Logo2.png");
         }
 
-        // Fuentes
+
         Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
         Font fontDato = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
 
-        // Datos Cliente
+    
         Paragraph cli = new Paragraph();
         cli.add(Chunk.NEWLINE);
         cli.add(new Chunk("Cliente\n\n", fontTitulo));
@@ -2693,7 +2896,7 @@ ObtenerLote(idProducto);
         dato.add(new Chunk(txtdireccion.getText() + "\n\n", fontDato));
         doc.add(dato);
 
-        // Tabla productos
+   
         PdfPTable tablapro = new PdfPTable(4);
         tablapro.setWidthPercentage(100);
         tablapro.getDefaultCell().setBorder(0);
@@ -2738,7 +2941,7 @@ ObtenerLote(idProducto);
         }
         doc.add(tablapro);
 
-        // Total
+   
         Paragraph info = new Paragraph();
         info.add(Chunk.NEWLINE);
         info.add("Total a Pagar: " + TotalPagar);

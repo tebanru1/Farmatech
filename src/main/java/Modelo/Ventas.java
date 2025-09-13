@@ -1,20 +1,31 @@
 
 package Modelo;
 
+import java.sql.Date;
+
 public class Ventas {
     private int id;
     private String Cliente;
     private String Vendedor;
     private float Total;
-
+    private Date fecha;
     public Ventas() {
     }
 
-    public Ventas(int id, String Cliente, String Vendedor, float Total) {
+    public Ventas(int id, String Cliente, String Vendedor, float Total, Date fecha) {
         this.id = id;
         this.Cliente = Cliente;
         this.Vendedor = Vendedor;
         this.Total = Total;
+        this.fecha = fecha;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public int getId() {
