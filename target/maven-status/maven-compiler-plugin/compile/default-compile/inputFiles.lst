@@ -2,6 +2,7 @@ C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\conexion.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\Excel.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\loginDAO.java
+C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\LoteDAO.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\ProductoDAO.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\ProveedorDAO.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Controlador\Usuario.java
@@ -11,6 +12,7 @@ C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Clien
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Config.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\detalleVenta.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\login.java
+C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Lote.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Producto.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Proveedor.java
 C:\Users\ESTEBAN\Documents\NetBeansProjects\Farmatech\src\main\java\Modelo\Ventas.java

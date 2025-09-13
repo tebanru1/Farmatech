@@ -1,3 +1,4 @@
+
 package Vista;
 
 import Modelo.login;
@@ -21,7 +22,6 @@ public Registrar() {
         setResizable(false);
         estilos();
         this.setLocationRelativeTo(null);
-        cargarDatosLogin();
         configurarPlaceholders();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
          
@@ -31,46 +31,7 @@ public Registrar() {
 private void estilos(){
     btnIngresar.putClientProperty( "JButton.buttonType" , "roundRect" );
 }
-    private void guardarDatosLogin(String usuario, String contraseña, boolean recordar) {
-        try {
-            Properties props = new Properties();
-            props.setProperty("usuario", usuario);
-            props.setProperty("contraseña", contraseña);
-            props.setProperty("recordar", String.valueOf(recordar));
-            FileOutputStream out = new FileOutputStream("login.properties");
-            props.store(out, null);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void cargarDatosLogin() {
-        try {
-            Properties props = new Properties();
-            File file = new File("login.properties");
-            if (file.exists()) {
-                FileInputStream in = new FileInputStream(file);
-                props.load(in);
-                in.close();
-
-                String usuario = props.getProperty("usuario");
-                String contraseña = props.getProperty("contraseña");
-                boolean recordar = Boolean.parseBoolean(props.getProperty("recordar"));
-
-                if (recordar) {
-                    txtUsuario.setText(usuario);
-                    txtUsuario.setForeground(new java.awt.Color(0, 0, 0));
-                    txtContraseña.setText(contraseña);
-                    txtContraseña.setForeground(new java.awt.Color(0, 0, 0));
-                    
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+ 
     private void configurarPlaceholders() {
          txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusGained(java.awt.event.FocusEvent evt) {
@@ -88,37 +49,37 @@ private void estilos(){
         }
     });
      
-    txtUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
+    txtUsuarioR.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusGained(java.awt.event.FocusEvent evt) {
-            if (txtUsuario.getText().equals("Ingrese Usuario")) {
-                txtUsuario.setText("");
-                txtUsuario.setForeground(java.awt.Color.BLACK);
+            if (txtUsuarioR.getText().equals("Ingrese Usuario")) {
+                txtUsuarioR.setText("");
+                txtUsuarioR.setForeground(java.awt.Color.BLACK);
             }
         }
 
         public void focusLost(java.awt.event.FocusEvent evt) {
-            if (txtUsuario.getText().isEmpty()) {
-                txtUsuario.setForeground(new java.awt.Color(204, 204, 204));
-                txtUsuario.setText("Ingrese Usuario");
+            if (txtUsuarioR.getText().isEmpty()) {
+                txtUsuarioR.setForeground(new java.awt.Color(204, 204, 204));
+                txtUsuarioR.setText("Ingrese Usuario");
             }
         }
     });
 
-    // Evento para limpiar el campo de contraseña al hacer clic
-    txtContraseña.addFocusListener(new java.awt.event.FocusAdapter() {
+   
+    txtContraseñaR.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusGained(java.awt.event.FocusEvent evt) {
-            if (String.valueOf(txtContraseña.getPassword()).equals("****************")) {
-                txtContraseña.setText("");
-                txtContraseña.setEchoChar('●'); // Activa puntos
-                txtContraseña.setForeground(java.awt.Color.BLACK);
+            if (String.valueOf(txtContraseñaR.getPassword()).equals("****************")) {
+                txtContraseñaR.setText("");
+                txtContraseñaR.setEchoChar('●'); // Activa puntos
+                txtContraseñaR.setForeground(java.awt.Color.BLACK);
             }
         }
 
         public void focusLost(java.awt.event.FocusEvent evt) {
-            if (String.valueOf(txtContraseña.getPassword()).isEmpty()) {
-                txtContraseña.setForeground(new java.awt.Color(204, 204, 204));
-                txtContraseña.setText("****************");
-                txtContraseña.setEchoChar((char) 0); // Desactiva puntos
+            if (String.valueOf(txtContraseñaR.getPassword()).isEmpty()) {
+                txtContraseñaR.setForeground(new java.awt.Color(204, 204, 204));
+                txtContraseñaR.setText("****************");
+                txtContraseñaR.setEchoChar((char) 0); // Desactiva puntos
             }
         }
     });
@@ -126,8 +87,8 @@ private void estilos(){
   
     public void Registar(){
         String nombre=txtNombre.getText();
-        String usuario=txtUsuario.getText();
-        String contraseña=String.valueOf(txtContraseña.getPassword());
+        String usuario=txtUsuarioR.getText();
+        String contraseña=String.valueOf(txtContraseñaR.getPassword());
         String rol=cbRol.getSelectedItem().toString();
         if (!"".equals(usuario)
                 &&!"".equals(nombre)
@@ -163,9 +124,9 @@ private void estilos(){
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtContraseña = new javax.swing.JPasswordField();
+        txtContraseñaR = new javax.swing.JPasswordField();
         txtNombre = new javax.swing.JTextField();
-        txtUsuario = new javax.swing.JTextField();
+        txtUsuarioR = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cbRol = new javax.swing.JComboBox<>();
 
@@ -221,8 +182,8 @@ private void estilos(){
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtNombre)
-                    .addComponent(txtUsuario)
-                    .addComponent(txtContraseña)
+                    .addComponent(txtUsuarioR)
+                    .addComponent(txtContraseñaR)
                     .addComponent(cbRol, 0, 206, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -247,11 +208,11 @@ private void estilos(){
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtUsuarioR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtContraseñaR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -299,16 +260,16 @@ private void estilos(){
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JPasswordField txtContraseñaR;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtUsuario;
+    private javax.swing.JTextField txtUsuarioR;
     // End of variables declaration//GEN-END:variables
 public String getUsuario() {
-    return txtUsuario.getText();
+    return txtUsuarioR.getText();
 }
 
 public String getContraseña() {
-    return new String(txtContraseña.getPassword());
+    return new String(txtContraseñaR.getPassword());
 }
 public javax.swing.JButton getBtnIngresar() {
     return btnIngresar;

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -17,31 +18,36 @@ public class ProductoDAO {
     PreparedStatement ps;
     ResultSet rs;
     
-    public boolean RegistrarProducto(Producto prod){
-        String sql="INSERT INTO productos(nombre,descripcion,precio,stock,id_proveedor,id_categoria)VALUES (?,?,?,?,?,?)";
-            try{
-                con=cn.conectar();
-                ps=con.prepareStatement(sql);
-                ps.setString(1, prod.getNombre());
-                ps.setString(2,prod.getDescripcion());
-                ps.setFloat(3, prod.getPrecio());
-                ps.setInt(4, prod.getStock());
-                ps.setInt(5, prod.getId_proveedor());
-                ps.setInt(6, prod.getId_Categoria());
-                ps.execute();
-                return true;
-            }catch(SQLException e){
-                System.out.println(e.toString());
-                return false;
-            }finally{
-                try{
-                    ps.close();
-                }catch(SQLException ex){
-                    System.out.println(ex.toString());
-                }
-            }
-        
+ public int RegistrarProducto(Producto prod) {
+    int idgenerado = -1; // valor por defecto si falla
+    String sql = "INSERT INTO productos(nombre, descripcion, precio, stock, id_proveedor, id_categoria) VALUES (?, ?, ?, ?, ?, ?)";
+    try {
+        con = cn.conectar();
+        ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); 
+        ps.setString(1, prod.getNombre());
+        ps.setString(2, prod.getDescripcion());
+        ps.setFloat(3, prod.getPrecio());
+        ps.setInt(4, prod.getStock());
+        ps.setInt(5, prod.getId_proveedor());
+        ps.setInt(6, prod.getId_Categoria());
+        ps.executeUpdate(); 
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            idgenerado = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al registrar producto: " + e.toString());
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al cerrar recursos: " + ex.toString());
+        }
     }
+    return idgenerado;
+}
+
     public void NombreProveedor(JComboBox proveedor){
         String sql="SELECT id,nombre FROM proveedores";
         try{
@@ -141,12 +147,20 @@ public class ProductoDAO {
         }
     }
     public boolean EliminarProducto(Producto prod){
-        String sql="DELETE FROM productos WHERE ID=?";
+        String sqlLotes = "DELETE FROM lotes WHERE id_producto = ?";
+        String sqlProd = "DELETE FROM productos WHERE id = ?";
         try{
-            con=cn.conectar();
-            ps=con.prepareStatement(sql);
+            con = cn.conectar();
+
+        
+            ps = con.prepareStatement(sqlLotes);
             ps.setInt(1, prod.getId());
-            ps.execute();
+            ps.executeUpdate();
+
+
+            ps = con.prepareStatement(sqlProd);
+            ps.setInt(1, prod.getId());
+            ps.executeUpdate();
             return true;
         }catch(SQLException e){
             System.out.println(e.toString());
@@ -219,6 +233,32 @@ public class ProductoDAO {
             }
         }
     }
+    public List<Producto> buscarPorNombre(String nombre) {
+    List<Producto> lista = new ArrayList<>();
+    String sql = "SELECT * FROM productos WHERE nombre LIKE ?";
+
+    try  {
+        con=cn.conectar();
+        ps=con.prepareStatement(sql);
+        ps.setString(1, nombre + "%"); 
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Producto p = new Producto();
+            p.setId(rs.getInt("id"));
+            p.setNombre(rs.getString("nombre"));
+            p.setDescripcion(rs.getString("descripcion"));
+            p.setPrecio(rs.getFloat("precio"));
+            p.setStock(rs.getInt("stock"));
+            p.setId_proveedor(rs.getInt("id_proveedor"));
+            p.setId_Categoria(rs.getInt("id_categoria"));
+            lista.add(p);
+        }
+    } catch (SQLException e) {
+        System.out.println(e.toString());
+    }
+    return lista;
+}
+
 }
 
 

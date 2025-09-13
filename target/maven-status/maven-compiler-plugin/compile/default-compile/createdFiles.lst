@@ -2,10 +2,12 @@ Vista\MenuPrincipal$38.class
 Vista\MenuPrincipal$18.class
 Vista\Login$3.class
 Vista\MenuPrincipal$28.class
+Vista\MenuPrincipal$48.class
 Vista\MenuPrincipal$6.class
 Vista\MenuPrincipal$15.class
 Vista\MenuPrincipal$25.class
 Vista\MenuPrincipal$9.class
+Vista\Login$6.class
 Vista\MenuPrincipal$32.class
 Vista\MenuPrincipal$12.class
 Vista\MenuPrincipal$40.class
@@ -25,6 +27,7 @@ Vista\MenuPrincipal$33.class
 Controlador\Usuario.class
 Vista\MenuPrincipal$23.class
 Vista\MenuPrincipal$22.class
+Vista\MenuPrincipal$50.class
 Vista\Registrar$4.class
 Vista\MenuPrincipal$29.class
 Vista\MenuPrincipal$45.class
@@ -36,6 +39,7 @@ Modelo\detalleVenta.class
 Vista\MenuPrincipal$17.class
 Controlador\conexion.class
 Vista\Login.class
+Vista\MenuPrincipal$51.class
 Vista\MenuPrincipal$41.class
 Vista\MenuPrincipal$11.class
 Vista\MenuPrincipal$21.class
@@ -61,6 +65,7 @@ Controlador\Excel.class
 Vista\MenuPrincipal$13.class
 Modelo\login.class
 Vista\MenuPrincipal$1.class
+Controlador\LoteDAO.class
 Modelo\Cliente.class
 Vista\MenuPrincipal$26.class
 Vista\MenuPrincipal$36.class
@@ -70,7 +75,9 @@ Vista\MenuPrincipal$7.class
 Vista\MenuPrincipal$42.class
 Vista\Login$4.class
 Vista\MenuPrincipal$14.class
+Vista\MenuPrincipal$49.class
 Vista\MenuPrincipal$30.class
 Vista\Registrar$1.class
+Modelo\Lote.class
 Vista\MenuPrincipal$8.class
 Vista\MenuPrincipal$37.class

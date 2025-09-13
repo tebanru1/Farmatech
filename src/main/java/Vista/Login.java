@@ -115,7 +115,7 @@ private void estilos(){
         lg = login.log(usuario, contraseña); 
 
         if (lg.getUsuario() != null) {
-          
+           guardarDatosLogin(usuario, contraseña, recordarme.getState());
             MenuPrincipal mp = new MenuPrincipal(lg);
             mp.setVisible(true);
             dispose();
@@ -182,7 +182,13 @@ private void estilos(){
 
         recordarme.setLabel("Recordarme");
 
+        contraOlvidada.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         contraOlvidada.setText("Contraseña Olvidada?");
+        contraOlvidada.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contraOlvidadaMouseClicked(evt);
+            }
+        });
 
         btnIngresar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnIngresar.setText("INGRESAR");
@@ -264,7 +270,7 @@ private void estilos(){
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-       
+        configurarPlaceholders();
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
@@ -272,8 +278,13 @@ private void estilos(){
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void txtContraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraseñaKeyPressed
+         configurarPlaceholders();
         if (evt.getKeyCode() == KeyEvent.VK_ENTER){Validar();}
     }//GEN-LAST:event_txtContraseñaKeyPressed
+
+    private void contraOlvidadaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contraOlvidadaMouseClicked
+       JOptionPane.showMessageDialog(null, "Favor comunicarse con el area de soporte: \nsoporte@farmatech.com\n+57 300 123 4567");
+    }//GEN-LAST:event_contraOlvidadaMouseClicked
 
 
    
